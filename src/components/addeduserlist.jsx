@@ -1,19 +1,35 @@
-const mockUsers = [
-    { id: 1, name: 'Mamie Fowler', location: 'American Samoa' },
-    { id: 2, name: 'Gavin Hunt', location: 'Georgia' }
-];
+import { useDispatch, useSelector } from "react-redux";
+import { ClearAllUsers, RemoveUser } from "../store/slice/UserSlice";
+import { clearAllUsers } from "../store/actions";
+
+
 
 const AddedUserList = () => {
+
+    const dispatch=useDispatch();
+
+    const handleRemoveUser=(id)=>{
+   dispatch(RemoveUser(id))
+    }
+    const userData= useSelector((state)=>{
+        return state.user;
+    })
+
+    const handleClearAllUsers=()=>{
+        dispatch(clearAllUsers())
+    }
     return (
         <div className='userlist'>
-            {mockUsers.map(user => (
-                <div key={user.id} className='userlist-item'>
-                    <span className='userlist-text'>{user.name}, {user.location}</span>
-                    <button className='btn btn-icon' aria-label='delete'>✖</button>
+             { userData.map((user,id)=>{
+                return(
+                <div key={id} className='userlist-item'>
+                    <span className='userlist-text'>{user}</span>
+                    <button className='btn btn-icon' aria-label='delete' onClick={()=> handleRemoveUser(id)}>✖</button>
                 </div>
-            ))}
-            <div className='userlist-footer'>
-                <button className='btn btn-danger'>Clear All Users</button>
+                )
+              })}
+            <div className=''>
+                <button className='btn btn-danger' onClick={()=>{handleClearAllUsers()}}>Clear All Users</button>
             </div>
         </div>
     )
